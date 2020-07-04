@@ -9,7 +9,6 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.google.gson.*;
 import io.github.lukeeff.muteadvancements.MuteAdvancements;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class AdvancementListener {
@@ -17,9 +16,9 @@ public class AdvancementListener {
     private final ProtocolManager manager;
     private final MuteAdvancements plugin;
 
-    public AdvancementListener(MuteAdvancements plugin, ProtocolManager manager) {
+    public AdvancementListener(MuteAdvancements plugin) {
         this.plugin = plugin;
-        this.manager = manager;
+        this.manager = plugin.getManager();
         addListener();
     }
 
@@ -34,8 +33,8 @@ public class AdvancementListener {
             @Override
             public void onPacketSending(PacketEvent event) {
                 if(event.getPacket().getChatTypes().read(0).equals(EnumWrappers.ChatType.SYSTEM)) {
-                    String advancement = event.getPacket().getChatComponents().getValues().get(0).getJson();
-                    JsonObject object = new JsonParser().parse(advancement).getAsJsonObject();
+                    final String advancement = event.getPacket().getChatComponents().getValues().get(0).getJson();
+                    final JsonObject object = new JsonParser().parse(advancement).getAsJsonObject();
                     if(isAdvancement(object) && isVanishedPlayer(object)) {
                         event.setCancelled(true);
                     }
@@ -71,7 +70,7 @@ public class AdvancementListener {
         final JsonObject with = object.getAsJsonArray("with").get(0).getAsJsonObject();
         final String insertionName = with.getAsJsonPrimitive("insertion").getAsString();
         final Player player = Bukkit.getPlayer(insertionName);
-        return player.isFlying(); //Replace with isVanished.
+        return player.isFlying(); //Replace with your check.
     }
-    
+
 }
