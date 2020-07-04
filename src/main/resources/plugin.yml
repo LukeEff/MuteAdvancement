@@ -1,0 +1,6 @@
+name: MuteAdvancements
+version: 1.0.0
+api-version: 1.16
+author: lukeeff
+description: Mute advancements to specific players.
+main: io.github.lukeeff.muteadvancements.MuteAdvancements
